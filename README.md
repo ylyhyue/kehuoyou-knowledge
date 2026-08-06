@@ -2,6 +2,7 @@
 
 > 一个持续迭代的客货邮融合发展项目知识中枢。
 > 把政策文件、汇报材料、标准规范、产品架构沉淀为可复用、可发布、可演进的数字资产。
+> **双通道实战项目**：GitHub（版本沉淀 / 对外展示）+ 飞书（协作主战场）相互同步。
 
 ## 项目定位
 
@@ -12,11 +13,23 @@
 3. **支撑产品**：为后续网站、Agent 应用、Skill 工具、CI/CD 数据层提供统一内容源。
 4. **形成方法**：把“平顶山经验”抽象为可复制、可推广的客货邮融合方法论。
 
+## 双通道架构（GitHub + 飞书）
+
+本项目是「真实实战项目」，内容在 **GitHub（版本沉淀 / 对外展示）** 与 **飞书（协作主战场）** 双通道并存并相互同步。
+
+- **GitHub**：本地知识库通过 `gh` 全量推送，承载版本历史、CI/CD、开源展示。
+- **飞书三件套**：
+  - 知识库 WIKI —— 知识沉淀主站，与 `policies/iterations/products` 一一映射；
+  - 多维表格 —— 版本迭代看板 + 核心指标看板；
+  - 群机器人 —— 每次迭代推送通知卡片。
+- **同步策略**：**飞书为主战场，GitHub 同步回流**。飞书编辑 → WorkBuddy automation 拉回本地 → `git commit` + `gh push`；首次本地全量双向灌入。详见 `docs/飞书打通方案.md`。
+
 ## 目录结构
 
 ```
 kehuoyou-knowledge/
 ├── README.md                 # 本文件
+├── .gitignore                # 忽略 data/向量索引、密钥等
 ├── policies/                 # 政策文件与解读
 │   ├── 豫交规2025_17号.md
 │   └── 开门红文件精神.md
@@ -30,15 +43,26 @@ kehuoyou-knowledge/
 ├── raw_extracts/             # Office/PPT 原文提取（自动产出）
 ├── assets/                   # 图片、素材、原始文件索引
 │   └── 原始文件索引.md
+├── docs/                     # 打通方案与同步说明
+│   └── 飞书打通方案.md
 ├── scripts/                  # 知识库维护脚本
-│   └── extract_office.py
-└── products/                 # 产品化设计
-    ├── 00_架构蓝图.md
-    ├── 01_网站产品.md
-    ├── 02_Agent应用.md
-    ├── 03_Skill工具.md
-    ├── 04_CI_CD数据层.md
-    └── 05_迭代路线图.md
+│   ├── extract_office.py       # Office/PPT 文本提取
+│   ├── build_vector_index.py   # 向量索引（Chroma）
+│   ├── sync_to_feishu.py       # 本地 → 飞书 WIKI 初始化
+│   ├── sync_from_feishu.py     # 飞书 → 本地（回流 GitHub）
+│   └── notify_feishu.py        # 群机器人通知
+├── products/                 # 产品化设计
+│   ├── 00_架构蓝图.md
+│   ├── 01_网站产品.md
+│   ├── 02_Agent应用.md
+│   ├── 03_Skill工具.md
+│   ├── 04_CI_CD数据层.md
+│   └── 05_迭代路线图.md
+├── site/                     # 静态网站（可部署）
+│   └── index.html
+└── .github/workflows/        # CI/CD：构建网站 + 更新知识索引
+    ├── build-site.yml
+    └── update-knowledge.yml
 ```
 
 ## 迭代总览
@@ -62,21 +86,23 @@ kehuoyou-knowledge/
 - **GLN**：全球位置码，标识物理或法律位置
 - **EPCIS**：电子产品代码信息服务，事件追踪
 
-## 使用方式
+## 标准工作流（新增一版材料时）
 
-1. **查阅政策**：进入 `policies/` 看政策要点。
-2. **了解演进**：进入 `iterations/` 看每次汇报的增删改。
-3. **查看产品**：进入 `products/` 看网站、Agent、Skill、CI/CD 设计。
-4. **提取原文**：`raw_extracts/` 下是 Office/PPT 的文本提取结果，便于检索。
+1. **提取**：`python3 scripts/extract_office.py` → 输出到 `raw_extracts/`
+2. **写库**：在 `iterations/` 新建 `vN_*.md`，更新 `迭代总览.md`
+3. **索引**：`python3 scripts/build_vector_index.py`
+4. **同步飞书（主战场）**：`python3 scripts/sync_to_feishu.py` 或在飞书直接编辑
+5. **回流 GitHub**：`gh` 推送 / `scripts/sync_from_feishu.py`
+6. **群通知**：`python3 scripts/notify_feishu.py --version vN --title "..."`
 
 ## 下一步行动
 
 详见 `products/05_迭代路线图.md`，本期优先：
 
-1. 搭建静态网站骨架，展示政策、案例、标准、服务。
-2. 开发第一个客货邮专家 Agent，支持政策问答与方案生成。
-3. 封装一个“客货邮政策速查”Skill，供 WorkBuddy 调用。
-4. 建立 Git 版本管理 + 自动化构建/部署流水线。
+1. 连接 GitHub + 飞书连接器，跑通双通道同步（见 `docs/飞书打通方案.md`）。
+2. 完善静态网站，展示政策、案例、标准、服务。
+3. 开发第一个客货邮专家 Agent，支持政策问答与方案生成。
+4. 沉淀可迭代的 `kehuoyou-knowledge` Skill，支撑不停迭代。
 
 ---
 
