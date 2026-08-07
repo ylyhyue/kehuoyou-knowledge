@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>平顶山市客货邮融合发展</title>
+  <style>
+    :root {
+      --primary: #0d47a1;
+      --accent: #00acc1;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+    header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    header p { color: rgba(255,255,255,0.85); font-size: 1.1rem; max-width: 720px; margin: 0 auto; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+    .section-title { font-size: 1.5rem; margin: 2rem 0 1rem; color: var(--accent); }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .card h3 { color: var(--accent); margin-bottom: 0.5rem; font-size: 1.2rem; }
+    .card p { color: var(--muted); font-size: 0.95rem; }
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .metric {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .metric .number { font-size: 2rem; font-weight: bold; color: var(--accent); }
+    .metric .label { color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem; }
+    footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 2rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>平顶山市客货邮融合发展</h1>
+    <p>以五级数据贯通为牵引，以真实业务闭环为核心，建设可持续、可复制的市域融合模式</p>
+  </header>
+
+  <div class="container">
+    <h2 class="section-title">核心抓手</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>一平台</h3>
+        <p>市级客货邮融合服务平台，以数据标准为底座、协同调度为核心，承接监测·调度·结算·统计。</p>
+      </div>
+      <div class="card">
+        <h3>一园区</h3>
+        <p>前店后仓 50 亩联合综合体，华豫 34 亩后仓（冷藏/分拣/赋码）+ 财投 20 亩前店（体验展示/电商直播）。</p>
+      </div>
+      <div class="card">
+        <h3>一链条</h3>
+        <p>标准化移动冷藏仓，把冷链末梢下沉到村、到田间地头，破解农产品“最先一公里”。</p>
+      </div>
+      <div class="card">
+        <h3>一体系</h3>
+        <p>形成具有区域特色的市级客货邮网融合体系，覆盖人、车、站、货、线全要素动态协同。</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">关键指标</h2>
+    <div class="metrics">
+      <div class="metric"><div class="number">6</div><div class="label">县级中心</div></div>
+      <div class="metric"><div class="number">84+</div><div class="label">乡镇综合站</div></div>
+      <div class="metric"><div class="number">2118</div><div class="label">村级服务点</div></div>
+      <div class="metric"><div class="number">100</div><div class="label">冷藏仓</div></div>
+    </div>
+
+    <h2 class="section-title">政策与标准</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>豫交规〔2025〕17号</h3>
+        <p>河南省农村客货邮融合发展扩面提质的纲领性文件，明确建设、验收、补助、平台技术要求。</p>
+      </div>
+      <div class="card">
+        <h3>GS1 全球标准</h3>
+        <p>GLN 位置码、SSCC 物流单元编码、EPCIS 事件追踪，支撑五级数据互联互通。</p>
+      </div>
+      <div class="card">
+        <h3>开门红第21条</h3>
+        <p>省政府明确提出出台农村客货邮融合发展专项支持政策，打造500个标准化“一点多能”服务点。</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">项目资源</h2>
+    <ul style="color: var(--muted); margin-left: 1.2rem;">
+      <li><a href="../README.md">知识库 README</a></li>
+      <li><a href="../iterations/迭代总览.md">五次迭代记录</a></li>
+      <li><a href="../products/00_架构蓝图.md">产品架构蓝图</a></li>
+      <li><a href="../products/05_迭代路线图.md">迭代路线图</a></li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>平顶山市交通运输局 · 财投数智 · 华豫永新 | 知识库持续更新中</p>
+  </footer>
+</body>
+</html>
