@@ -24,6 +24,15 @@
   - 群机器人 —— 每次迭代推送通知卡片。
 - **同步策略**：**飞书为主战场，GitHub 同步回流**。飞书编辑 → WorkBuddy automation 拉回本地 → `git commit` + `gh push`；首次本地全量双向灌入。详见 `docs/飞书打通方案.md`。
 
+## 线上仓库（GitHub）
+
+- 🔗 公开仓库：<https://github.com/ylyhyue/kehuoyou-knowledge>
+- 分支：`main` | 已纳入版本控制文件 **34 个**（含中文/空格路径，已通过 API 全量推送）
+- CI/CD：`build-site.yml`（构建静态站）、`update-knowledge.yml`（更新知识索引）
+- 本地向量索引 `data/`（Chroma，可重建）按 `.gitignore` 不入库
+
+> ⚠️ 安全提示：本项目早期曾使用明文 GitHub PAT 完成首次推送，该令牌已暴露，请到 GitHub → Settings → Developer settings → Personal access tokens 中**撤销（revoke）**对应令牌，并改用 WorkBuddy 的 GitHub 连接器或 SSH 密钥做后续同步。
+
 ## 目录结构
 
 ```
