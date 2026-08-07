@@ -1,0 +1,104 @@
+{
+  "政策·豫交规〔2025〕17号": {
+    "node_token": "Yo40w473siaQbfkTq4TcgAAcnZg",
+    "obj_token": "RlAOdKPGkoAOGtx4zLOcHseanYb",
+    "url": "",
+    "md": "policies/豫交规2025_17号.md"
+  },
+  "政策·开门红文件精神": {
+    "node_token": "NZwUwwanAiDuAsk8oH4cCqGEn6b",
+    "obj_token": "RHM3dfkgTodYvsxGJtocUwbcn5e",
+    "url": "",
+    "md": "policies/开门红文件精神.md"
+  },
+  "迭代·总览": {
+    "node_token": "U135w1q1Pi1ue3kJUARczCdUn1g",
+    "obj_token": "CEixdoQHNoWG0vxXUTXcwdEmnQE",
+    "url": "",
+    "md": "iterations/迭代总览.md"
+  },
+  "迭代·v1 客货邮报告202602": {
+    "node_token": "Qmf2wgAWTiDaIYkJdMCcahMfntc",
+    "obj_token": "BgnHdiwEvobnqzxIry0cvMyon4e",
+    "url": "",
+    "md": "iterations/v1_客货邮报告202602.md"
+  },
+  "迭代·v2 平台技术展示汇报": {
+    "node_token": "EdhpwkIxWieDvWkYkekcWus6nXf",
+    "obj_token": "DSAhdzDRno5dx4x2zsZcaQ2QnMg",
+    "url": "",
+    "md": "iterations/v2_平台技术展示汇报.md"
+  },
+  "迭代·v3 合作意向汇报v1.1": {
+    "node_token": "WhlBw4ivtis0i1k0uSgcdcUVnWh",
+    "obj_token": "G7xbd59VEokQXSxgNFwctZzjn2S",
+    "url": "",
+    "md": "iterations/v3_合作意向汇报v1_1.md"
+  },
+  "迭代·v4 冷藏仓汇报v1.2": {
+    "node_token": "KyOfw4ZXPi5xW5k7CJfc51TMnIg",
+    "obj_token": "WeHcdZJPPoeTSnxL608cee5pn6g",
+    "url": "",
+    "md": "iterations/v4_冷藏仓汇报v1_2.md"
+  },
+  "迭代·v5 冷藏仓汇报v1.3": {
+    "node_token": "V3F9wRjMkiBzk4kJsaQc5S2Enth",
+    "obj_token": "KADgdWHFjoLn0CxEV0tcCWK8ntb",
+    "url": "",
+    "md": "iterations/v5_冷藏仓汇报v1_3.md"
+  },
+  "产品·00 架构蓝图": {
+    "node_token": "IQEswdquLida7GkDgrHcc8BPnHb",
+    "obj_token": "WtztdPyQDo4pLXxkOjVcQzqFnnf",
+    "url": "",
+    "md": "products/00_架构蓝图.md"
+  },
+  "产品·01 网站产品": {
+    "node_token": "NMsowflIQir3eLkM9iac0y2knQc",
+    "obj_token": "XCwQdvv0ToUmmyx06AhcBOnlnEI",
+    "url": "",
+    "md": "products/01_网站产品.md"
+  },
+  "产品·02 Agent应用": {
+    "node_token": "QYIewd5yOi0nfhkzZjRcxWTiniI",
+    "obj_token": "TpMTdo5DdoyG7fxbYlscHmagnKc",
+    "url": "",
+    "md": "products/02_Agent应用.md"
+  },
+  "产品·03 Skill工具": {
+    "node_token": "GQF8w8GePi1vd0kbCINcR8UYnxb",
+    "obj_token": "PqUQdXqzWoxLZGxBmM6cEd28nKe",
+    "url": "",
+    "md": "products/03_Skill工具.md"
+  },
+  "产品·04 CI/CD数据层": {
+    "node_token": "Hfp6wF7uji73tTkB84ccwV1vnPf",
+    "obj_token": "Ez8wd3dCmo5y1fxlmIVclmTmn8e",
+    "url": "",
+    "md": "products/04_CI_CD数据层.md"
+  },
+  "产品·05 迭代路线图": {
+    "node_token": "KTYMwUxS5ipzFTk01nZcq7RinOf",
+    "obj_token": "YdlQdu1xpooqDHx8yFXckc8qnih",
+    "url": "",
+    "md": "products/05_迭代路线图.md"
+  },
+  "原始材料索引": {
+    "node_token": "PpVGw3wDUihLJqkpt6ycfkgHnSf",
+    "obj_token": "MT7sdtMLLojgTYxvOYRc2piFnLb",
+    "url": "",
+    "md": null
+  },
+  "多维表格·版本迭代看板": {
+    "base_token": "O8X9bGoFuatKpXssNCacowk2nSg",
+    "table_id": "tblnKaCqka9KhTfn",
+    "url": "https://scnke9dkyl7e.feishu.cn/base/O8X9bGoFuatKpXssNCacowk2nSg",
+    "md": null
+  },
+  "多维表格·核心指标看板": {
+    "base_token": "YSLXbvPq8a8HsrsljFtcWyshnYd",
+    "table_id": "tblF1vJJ68XTxKI0",
+    "url": "https://scnke9dkyl7e.feishu.cn/base/YSLXbvPq8a8HsrsljFtcWyshnYd",
+    "md": null
+  }
+}

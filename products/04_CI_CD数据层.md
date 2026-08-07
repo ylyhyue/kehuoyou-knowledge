@@ -7,7 +7,7 @@
 ## 数据资产清单
 
 | 类型 | 来源 | 加工后形态 | 用途 |
-|---|---|---|---|
+|-|-|-|-|
 | 政策文件 | 扫描件/Word/PDF | Markdown + 要点摘要 | 网站、Agent、Skill |
 | 汇报材料 | PPT/Word | Markdown + 提取文本 | 迭代记录、案例、PPT生成 |
 | 标准规范 | 网页/文档 | 结构化条目 + 示例 | 标准匠 Skill、培训 |
@@ -49,27 +49,32 @@
 ### 1. 内容提取层
 
 **工具**：
+
 - `scripts/extract_office.py`：从 DOCX/PPTX 提取文本
 - `scripts/extract_pdf.py`：从 PDF 提取文本
 - `scripts/extract_images.py`：图片 OCR（如有需要）
 
 **输出**：
+
 - `raw_extracts/*.md`
 
 ### 2. 知识加工层
 
 **人工加工**：
+
 - 政策要点提炼
 - 迭代日志编写
 - 案例整理
 
 **AI 辅助**：
+
 - 自动摘要
 - 关键词抽取
 - 实体识别（节点、线路、主体、指标）
 - 关系抽取
 
 **输出**：
+
 - `policies/*.md`
 - `iterations/*.md`
 - `products/*.md`
@@ -78,15 +83,18 @@
 ### 3. 知识存储层
 
 **Markdown 内容源**：
+
 - 所有可阅读内容以 Markdown 保存
 - Git 版本管理
 
 **向量库**：
+
 - 将 Markdown 切片为 chunk，生成向量
 - 支持语义检索
 - 工具：Chroma / Qdrant
 
 **知识图谱**：
+
 - 实体：政策、节点、线路、企业、标准、指标、项目
 - 关系：依据、包含、位于、运营、达到、采用
 - 工具：Neo4j / JSON-LD
@@ -94,24 +102,29 @@
 ### 4. 产品构建层
 
 **网站构建**：
+
 - Markdown → HTML（Vite/Next.js）
 - 数据看板：静态 JSON / 动态 API
 
 **Agent 知识库更新**：
+
 - 更新向量库
 - 更新提示词
 
 **Skill 更新**：
+
 - 同步 `references/` 下政策文件
 - 更新 SKILL.md
 
 ### 5. 自动发布层
 
 **触发条件**：
+
 - Git 提交到 main 分支
 - 定时任务（如每天凌晨同步最新数据）
 
 **发布动作**：
+
 - 构建网站并部署到 CloudStudio
 - 更新 Agent 知识库
 - 打包并发布 Skill
@@ -201,7 +214,7 @@ jobs:
 ## 工具选型
 
 | 用途 | 推荐工具 | 备选 |
-|---|---|---|
+|-|-|-|
 | 版本控制 | Git + GitHub | GitLab |
 | 流水线 | GitHub Actions | Jenkins |
 | 内容提取 | Python + python-docx/pptx | edsdk |

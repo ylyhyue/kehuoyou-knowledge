@@ -3,79 +3,143 @@
 """
 飞书 → 本地知识库 同步脚本（飞书主，GitHub 同步回流）
 
-功能：
-  从飞书知识库 WIKI 拉取最新节点内容，写回本地 Markdown 源文件，
-  然后 git commit + gh push 回流 GitHub。
-  这是「飞书为主战场」策略的回流通道，建议由 WorkBuddy automation 定时/触发执行。
+策略：飞书为主战场，本地 Markdown 为源、GitHub 为对外展示。
+本脚本在「飞书被编辑」后，把最新内容回流到本地并 commit + 最优努力 push。
 
-依赖：环境变量
-  FEISHU_APP_ID / FEISHU_APP_SECRET / FEISHU_WIKI_SPACE_ID
-  （gh 需已登录且仓库已配置 remote）
+  - WIKI 节点：用 lark-cli docs +fetch 拉取最新 markdown，写回本地 md（按 feishu_nodes.json 的 md 路径）
+  - 多维表格：用 lark-cli base +record-list 拉取记录，存为 JSON 快照（避免列顺序依赖）
+  - 变更后 git commit（本地）；若配置了 remote + 凭证则 push 回流 GitHub
 
-运行：
-  python3 scripts/sync_from_feishu.py
+依赖：lark-cli（已通过 WorkBuddy 飞书连接器以 user 身份授权）
+运行：python3 scripts/sync_from_feishu.py
 """
 import os
 import sys
+import json
+import time
 import subprocess
-import requests
+import shutil
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
 
 BASE = Path(__file__).resolve().parent.parent
-OPEN_API = "https://open.feishu.cn/open-apis"
+NODES = BASE / "feishu_nodes.json"
+LARK = shutil.which("lark-cli") or "lark-cli"
+CST = timezone(timedelta(hours=8))
 
 
-def get_tenant_access_token() -> str:
-    resp = requests.post(
-        f"{OPEN_API}/auth/v3/tenant_access_token/internal",
-        json={"app_id": os.environ["FEISHU_APP_ID"], "app_secret": os.environ["FEISHU_APP_SECRET"]},
-        timeout=15,
-    )
-    data = resp.json()
-    if data.get("code") != 0:
-        raise RuntimeError(f"获取 token 失败: {data}")
-    return data["tenant_access_token"]
+def run_lark(args, retries=4):
+    """调用 lark-cli（user 身份, json 输出），返回解析后的 dict；带限流退避。"""
+    cmd = [LARK, *args, "--as", "user", "--format", "json"]
+    for attempt in range(retries):
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=90)
+        except Exception as e:
+            print(f"[WARN] lark-cli 调用异常: {e}")
+            return None
+        out = (r.stdout or "").strip()
+        i = out.find("{")
+        if i < 0:
+            print(f"[WARN] lark-cli 无 JSON 输出: {out[:200]}")
+            return None
+        try:
+            d = json.JSONDecoder().raw_decode(out[i:])[0]
+        except Exception:
+            print(f"[WARN] JSON 解析失败: {out[:200]}")
+            return None
+        if d.get("ok") is True:
+            return d
+        err = d.get("error")
+        msg = err.get("message", "") if isinstance(err, dict) else str(err)
+        print(f"[WARN] lark-cli 未成功(尝试{attempt+1}): {msg}")
+        if attempt < retries - 1:
+            time.sleep(min(30, 2 ** (attempt + 2)))
+    return None
 
 
-def pull_wiki_nodes(token: str) -> dict:
-    """拉取知识空间全部节点（框架：返回 {title: content}）。"""
-    # 真实实现需分页遍历 wiki/v2/spaces/:space_id/nodes 并读取 docx 内容
-    return {}
+def fetch_wiki_md(obj_token):
+    d = run_lark(["docs", "+fetch", "--doc", obj_token, "--doc-format", "markdown"])
+    if not d:
+        return None
+    return d.get("data", {}).get("document", {}).get("content")
 
 
-def write_back(nodes: dict):
-    changed = []
-    for rel_path, content in nodes.items():
-        target = BASE / rel_path
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content, encoding="utf-8")
-        changed.append(rel_path)
-    return changed
+def fetch_base_records(base_token, table_id):
+    d = run_lark(["base", "+record-list", "--base-token", base_token, "--table-id", table_id])
+    if not d:
+        return None
+    return d.get("data", {}).get("data")
 
 
-def git_commit_push(changed):
-    if not changed:
-        print("[INFO] 无变更，跳过提交。")
-        return
-    subprocess.run(["git", "-C", str(BASE), "add", "-A"], check=True)
-    msg = "sync(feishu): 回流飞书更新 " + ", ".join(changed[:3]) + ("..." if len(changed) > 3 else "")
-    subprocess.run(["git", "-C", str(BASE), "commit", "-m", msg], check=True)
-    # gh push（需已登录且配置 remote）
-    r = subprocess.run(["gh", "repo", "sync"], cwd=str(BASE))
-    if r.returncode != 0:
-        subprocess.run(["git", "-C", str(BASE), "push"], check=True)
-    print(f"[OK] 已提交并回流 GitHub，变更 {len(changed)} 个文件。")
+def write_if_changed(path: Path, content: str) -> bool:
+    if path.exists() and path.read_text(encoding="utf-8") == content:
+        return False
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+    return True
 
 
 def main():
-    for name in ("FEISHU_APP_ID", "FEISHU_APP_SECRET", "FEISHU_WIKI_SPACE_ID"):
-        if not os.environ.get(name):
-            print(f"[ERROR] 缺少环境变量 {name}")
-            sys.exit(1)
-    token = get_tenant_access_token()
-    nodes = pull_wiki_nodes(token)
-    changed = write_back(nodes)
-    git_commit_push(changed)
+    if not NODES.exists():
+        print(f"[ERROR] 找不到 {NODES}")
+        sys.exit(1)
+    nodes = json.loads(NODES.read_text(encoding="utf-8"))
+    changed = []
+
+    # 1) WIKI 节点回流
+    for title, info in nodes.items():
+        md, obj = info.get("md"), info.get("obj_token")
+        if not md or not obj:
+            continue
+        print(f"[..] 拉取 WIKI: {title}")
+        content = fetch_wiki_md(obj)
+        if content is None:
+            print(f"[WARN] 跳过（拉取失败）: {title}")
+            continue
+        if write_if_changed(BASE / md, content):
+            changed.append(md)
+            print(f"[OK] 更新: {md}")
+
+    # 2) 多维表格快照（JSON，稳健不依赖列顺序）
+    snap_dir = BASE / "data" / "feishu_base"
+    for title, info in nodes.items():
+        bt, tid = info.get("base_token"), info.get("table_id")
+        if not bt or not tid:
+            continue
+        print(f"[..] 快照 Base: {title}")
+        recs = fetch_base_records(bt, tid)
+        if recs is None:
+            print(f"[WARN] 跳过（拉取失败）: {title}")
+            continue
+        snap_name = title.split("·")[-1] if "·" in title else title
+        snap_path = snap_dir / f"{snap_name}.json"
+        payload = json.dumps(
+            {"table": title, "updated_at": datetime.now(CST).isoformat(), "records": recs},
+            ensure_ascii=False, indent=2,
+        )
+        if write_if_changed(snap_path, payload):
+            changed.append(str(snap_path.relative_to(BASE)))
+            print(f"[OK] 快照: {snap_path.name}")
+
+    if not changed:
+        print("[INFO] 飞书无变更，跳过提交。")
+        return
+
+    # 3) git 提交（本地）+ 最优努力 push
+    subprocess.run(["git", "-C", str(BASE), "add", "-A"], check=True)
+    ts = datetime.now(CST).strftime("%Y-%m-%d %H:%M")
+    msg = f"sync(feishu): 回流 {len(changed)} 项 @ {ts}"
+    subprocess.run(["git", "-C", str(BASE), "commit", "-m", msg], check=True)
+    print(f"[OK] 已本地提交 {len(changed)} 项。")
+    r = subprocess.run(
+        ["git", "-C", str(BASE), "push", "origin", "HEAD"],
+        capture_output=True, text=True,
+    )
+    if r.returncode == 0:
+        print("[OK] 已回流 GitHub。")
+    else:
+        print("[WARN] push 未成功（可能缺少凭证/连接器或历史不一致），本地已提交；详情：")
+        print(r.stderr.strip()[:400])
 
 
 if __name__ == "__main__":

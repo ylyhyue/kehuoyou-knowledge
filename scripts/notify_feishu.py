@@ -18,7 +18,7 @@ import argparse
 import requests
 
 
-def send(version: str, title: str, github_url: str = "", wiki_url: str = ""):
+def send(version: str, title: str, github_url: str = "", wiki_url: str = "", base_url: str = ""):
     webhook = os.environ.get("FEISHU_WEBHOOK")
     if not webhook:
         print("[ERROR] 缺少环境变量 FEISHU_WEBHOOK")
@@ -32,6 +32,8 @@ def send(version: str, title: str, github_url: str = "", wiki_url: str = ""):
         lines.append(f"**GitHub**：[查看提交]({github_url})")
     if wiki_url:
         lines.append(f"**飞书节点**：[查看知识库]({wiki_url})")
+    if base_url:
+        lines.append(f"**多维表格**：[查看看板]({base_url})")
 
     card = {
         "msg_type": "interactive",
@@ -60,8 +62,9 @@ def main():
     ap.add_argument("--title", required=True)
     ap.add_argument("--github", default="")
     ap.add_argument("--wiki", default="")
+    ap.add_argument("--base", default="")
     args = ap.parse_args()
-    send(args.version, args.title, args.github, args.wiki)
+    send(args.version, args.title, args.github, args.wiki, args.base)
 
 
 if __name__ == "__main__":
