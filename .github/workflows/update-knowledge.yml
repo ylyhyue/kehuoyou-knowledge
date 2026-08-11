@@ -1,12 +1,14 @@
 name: Update Knowledge Index
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'policies/**'
-      - 'iterations/**'
-      - 'scripts/build_vector_index.py'
+  # 2026-08-11：暂时关闭自动触发，避免每次 push 都因路径问题发失败邮件。
+  # 如需恢复自动构建，取消下面这段注释即可。
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'policies/**'
+  #     - 'iterations/**'
+  #     - 'scripts/build_vector_index.py'
   workflow_dispatch:
 
 jobs:

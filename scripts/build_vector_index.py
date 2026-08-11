@@ -23,7 +23,7 @@ except ImportError:
     from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
 
-BASE_DIR = Path("/Users/yuelaiyuehao/Documents/workbuddy 设计创意空间/kehuoyou-knowledge")
+BASE_DIR = Path(__file__).resolve().parent.parent
 DB_DIR = BASE_DIR / "data" / "vector_index"
 
 
