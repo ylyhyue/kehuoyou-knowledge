@@ -39,3 +39,9 @@
 - WIKI markdown 本地内容无变化；2 张多维表格快照写入 `data/feishu_base/*.json`（09:59 时间戳刷新）。
 - 根因同上次：`data/` 被 `.gitignore` 忽略，快照不在 git 跟踪范围 → `git add -A` 未纳入 → `git commit` 因 nothing to commit 退出码 1（脚本 `check=True` 抛错），git push 未执行。
 - 结论：**本次无真实飞书内容变更回流 GitHub**（working tree 始终 clean）。待办建议同上，未改动脚本/忽略规则。
+
+## 2026-08-12 15:24 执行
+- lark-cli 可用（user 身份，v1.0.86），飞书连接器授权正常；13 个 WIKI 节点 + 2 张多维表格快照均成功拉取。
+- 脚本本地提交 `ed17e87`（消息"回流 2 项"），但实质为**幽灵变更**：git 实际仅纳入 `.workbuddy/automations/automation-1786070860218/memory.md`（+8 行），即本自动化 09:12 运行写入的自身日志。WIKI markdown 无真实内容变化；2 张 Base 快照仍被 `.gitignore` 忽略不在 git 范围。
+- **根因（新发现）**：自动化步骤 5 每轮向 git 跟踪的 memory.md 追加日志但不提交 → 下一轮脚本 `git add -A` 把上轮日志当作"变更"提交，形成幽灵提交循环。建议：① 步骤 5 写日志后随脚本一并提交，或在脚本变更检测中排除 `.workbuddy/`；② 此前 09:12 的真实飞书变更（迭代总览.md，commit `ae248df`）仍本地未推送。
+- **git push 失败**：推送瞬间远端已超前本地（非快进"fetch first"拒绝），随后 `git fetch origin` 因 github.com:443 超时无法连通。本地累计领先 3 个提交（`ed17e87`/`ae248df`/`89bc22d`），GitHub 暂未收到；待网络连通后需 fetch+rebase+push 补推。
