@@ -26,6 +26,14 @@
 - 根因同前：`data/` 被 `.gitignore` 忽略（`data/` 规则），快照不在 git 跟踪范围 → `git add -A` 未纳入 → `git commit` 因 nothing to commit 退出码 1（脚本 `check=True` 抛错），git push 未执行（working tree 始终 clean）。
 - 结论：**本次无真实飞书内容变更回流 GitHub**。待办建议仍有效（豁免 `data/feishu_base/` 或快照改为仅比对记录内容），未改动脚本/忽略规则。
 
+## 2026-08-12 09:12 执行
+- lark-cli 可用（user 身份，v1.0.86），飞书连接器授权正常；13 个 WIKI 节点 + 2 张多维表格快照均成功拉取。
+- **本次出现真实飞书内容变更**（与历次纯时间戳伪变更不同）：WIKI 节点 `iterations/迭代总览.md` 在飞书中被编辑——删除整段"v6 数字化赋能小程序"产品化落地说明（12 行），并将第 5 点"政策化"补全为单行。
+- 脚本判定「回流 3 项」= 1 个 WIKI 节点（迭代总览.md）+ 2 张多维表格快照。本地提交 `ae248df`（work tree 已 clean）。
+- 2 张 Base 快照 `data/feishu_base/*.json` 仍被 `.gitignore` 忽略，未计入 git；唯一纳入 git 的变更是 迭代总览.md（1 insertion, 12 deletions）。
+- **git push 失败**：`fatal: unable to access 'https://github.com/ylyhyue/kehuoyou-knowledge.git/': Failed to connect to github.com port 443 after 75015 ms` —— 本地网络无法连通 GitHub（超时），非凭证/连接器问题。本地已提交，GitHub 暂未收到本次回流。
+- 结论：本次本地回流 1 个真实被跟踪文件（迭代总览.md），GitHub 推送因网络超时未成功，待下次连通时补推（若本地 commit 仍在）。
+
 ## 2026-08-09 09:59 执行
 - lark-cli 可用（user 身份，refresh 至 2026-08-14），飞书连接器授权正常；13 个 WIKI 节点 + 2 张多维表格快照均成功拉取。
 - WIKI markdown 本地内容无变化；2 张多维表格快照写入 `data/feishu_base/*.json`（09:59 时间戳刷新）。
