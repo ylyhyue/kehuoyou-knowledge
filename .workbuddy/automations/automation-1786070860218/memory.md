@@ -65,3 +65,10 @@
 - **push 首轮被拒**：`fetch first`（远端 main 已超前本地）。fetch 后发现 origin/main 实为 2 个提交（bf29074/9062122「停止 Update Knowledge Index 自动触发并修复脚本路径」，仅改 yml 与 py，是本地缺失的有益修复）。本地 HEAD 仍领先 6 个积压提交。
 - **已手动整合并补推成功**：`git merge origin/main`（ort 策略，无冲突，自动保留本地 memory.md/迭代总览.md，并入 yml/py 修复）→ `git push origin HEAD` 成功（9062122..33c3304 → main）。最终 fetch 复核：与 origin/main 0 前 / 0 后，working tree clean。
 - **结论：本次无真实飞书内容变更，但历史性积压提交（含 2026-08-12 真实变更 迭代总览.md@ae248df）已随本次整合全部推送 GitHub，本地与远端完全同步。** 待办建议仍有效（排除 `.workbuddy/` 防幽灵提交循环；豁免 `data/feishu_base/` 若需快照入库）。
+
+## 2026-08-14 15:46 执行
+- lark-cli 可用（user 身份，v1.0.86），飞书连接器授权正常；13 个 WIKI 节点 + 2 张多维表格快照均成功拉取。
+- WIKI markdown 本地内容无变化（13 个节点均无 [OK] 更新）；2 张多维表格快照写入 `data/feishu_base/*.json`（15:46 时间戳刷新，判为「伪变更 2 项」），仍被 `.gitignore` 忽略不入 git。
+- 脚本提交 `bf615b3`（"回流 2 项"），实质仍为幽灵提交：`git add -A` 把此前写入本文件的自身日志（memory.md +8 行）一并纳入；2 张 Base 快照因 gitignore 未进 git。
+- **git push 失败**：`fatal: unable to access 'https://github.com/ylyhyue/kehuoyou-knowledge.git/': Failed to connect to github.com port 443 after 14419 ms: Couldn't connect to server` —— 本地网络无法连通 GitHub，非凭证/连接器问题。本地领先 `origin/main` 共 1 个提交（`bf615b3`）。
+- 结论：**本次无真实飞书内容变更回流 GitHub**（working tree 提交后 clean，但本地比远端多 1 个幽灵提交）。待网络连通后需 `git push` 补推。待办建议仍有效（排除 `.workbuddy/` 防幽灵提交循环；豁免 `data/feishu_base/` 若需快照入库）。
