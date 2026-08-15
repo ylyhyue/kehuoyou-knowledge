@@ -86,3 +86,10 @@
 - 脚本提交 `af48e3b`（"回流 2 项"），实质仍为幽灵提交：`git add -A` 把上一轮（22:09）写入本文件的自身日志（memory.md +7 行）一并纳入；WIKI 无真实内容变化，2 张 Base 快照因 gitignore 未进 git。
 - **git push 本次成功**：`git push origin HEAD` 顺利推送；`git fetch origin` 复核 `HEAD...origin/main = 0 0`，本地与远端完全同步，working tree clean。
 - 结论：**本次无真实飞书内容变更回流 GitHub**（git 实际仅纳入本自动化自身日志幽灵提交）。待办建议仍有效（排除 `.workbuddy/` 防幽灵提交循环；豁免 `data/feishu_base/` 若需快照入库；关注 `政策·开门红文件精神` 节点后续是否仍拉取失败）。
+
+## 2026-08-15 12:37 执行
+- lark-cli 可用（user 身份，token 自动 refresh 成功），飞书连接器授权正常；13 个 WIKI 节点 + 2 张多维表格快照均成功拉取（脚本整体耗时约 17 分钟，疑似 lark 侧网络延迟，已正常完成）。
+- 13 个 WIKI 节点均无 [OK] 更新标记，本地 markdown 无真实内容变化；2 张多维表格快照写入 `data/feishu_base/*.json`（12:37 时间戳刷新，判为「伪变更 2 项」），仍被 `.gitignore` 忽略不入 git。
+- 脚本提交 `162e77e`（"回流 2 项"），实质仍为幽灵提交：`git add -A` 把上一轮（05:19）写入本文件的自身日志（memory.md +7 行）一并纳入；WIKI 无真实内容变化，2 张 Base 快照因 gitignore 未进 git。
+- **git push 本次成功**：`git push origin HEAD` 顺利推送；`git fetch origin` 复核 `HEAD...origin/main = 0 0`，本地与远端完全同步，working tree clean。
+- 结论：**本次无真实飞书内容变更回流 GitHub**（git 实际仅纳入本自动化自身日志幽灵提交）。待办建议仍有效（排除 `.workbuddy/` 防幽灵提交循环；豁免 `data/feishu_base/` 若需快照入库）。
